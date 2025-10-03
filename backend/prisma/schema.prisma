@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models for our Hotel Operations Management System
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tasks     Task[]
+  assignedTasks Task[] @relation("assignedTo")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Guest {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?
+  phone     String?
+  requests  Request[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  number    String   @unique
+  type      String
+  status    RoomStatus @default(DIRTY)
+  requests  Request[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoomStatus {
+  id    Int    @id @default(autoincrement())
+  name  String @unique // CLEAN, DIRTY, INSPECTED, OUT_OF_ORDER
+  rooms Room[]
+}
+
+model Department {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  requests    Request[]
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Request {
+  id           Int        @id @default(autoincrement())
+  guest        Guest      @relation(fields: [guestId], references: [id])
+  guestId      Int
+  room         Room       @relation(fields: [roomId], references: [id])
+  roomId       Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  title        String
+  description  String
+  priority     Priority   @default(MEDIUM)
+  status       RequestStatus @default(PENDING)
+  assignedTo   User?      @relation("assignedTo", fields: [assignedToId], references: [id])
+  assignedToId Int?
+  tasks        Task[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Priority {
+  id    Int    @id @default(autoincrement())
+  level String @unique // LOW, MEDIUM, HIGH, URGENT
+  requests Request[]
+}
+
+model RequestStatus {
+  id     Int    @id @default(autoincrement())
+  status String @unique // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  requests Request[]
+}
+
+model Task {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  request     Request    @relation(fields: [requestId], references: [id])
+  requestId   Int
+  department  Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  assignedTo  User       @relation("assignedTo", fields: [assignedToId], references: [id])
+  assignedToId Int
+  status      TaskStatus @default(PENDING)
+  dueDate     DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model TaskStatus {
+  id     Int    @id @default(autoincrement())
+  status String @unique // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  tasks  Task[]
+}

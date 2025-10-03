@@ -1,0 +1,129 @@
+/* Mobile-specific styles for the dashboard */
+@media (max-width: 767px) {
+  .mobile-card {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
+  
+  .mobile-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-action-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .mobile-progress-container {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-activity-container {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-requests-container {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
+  
+  .mobile-table th {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .mobile-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .mobile-avatar {
+    height: 2rem;
+    width: 2rem;
+  }
+  
+  .mobile-header {
+    padding: 0.75rem;
+  }
+  
+  .mobile-main {
+    padding: 0.75rem;
+  }
+  
+  .mobile-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  .mobile-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .mobile-stat-number {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  .mobile-stat-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  /* Touch-friendly buttons */
+  .touch-button {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Reduced padding for better screen utilization */
+  .compact-padding {
+    padding: 0.5rem;
+  }
+  
+  .compact-margin {
+    margin: 0.5rem 0;
+  }
+  
+  /* Smaller text for mobile */
+  .text-mobile-xs {
+    font-size: 0.7rem;
+  }
+  
+  .text-mobile-sm {
+    font-size: 0.8rem;
+  }
+  
+  .text-mobile-base {
+    font-size: 0.9rem;
+  }
+  
+  /* Optimized table for mobile */
+  .mobile-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fixed bottom navigation */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+  
+  /* Adjust main content to account for fixed nav */
+  .mobile-main-content {
+    padding-bottom: 4rem;
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@hotelops.com",
+      "password": "password123",
+      "name": "Admin User",
+      "role": "ADMIN"
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "number": "101",
+      "floor": 1,
+      "type": "Standard",
+      "status": "CLEAN",
+      "updatedAt": "2025-09-16T12:17:32.613Z"
+    },
+    {
+      "id": 2,
+      "number": "102",
+      "floor": 1,
+      "type": "Standard",
+      "status": "DIRTY",
+      "updatedAt": "2025-09-16T11:17:32.614Z"
+    },
+    {
+      "id": 3,
+      "number": "103",
+      "floor": 1,
+      "type": "Deluxe",
+      "status": "INSPECTED",
+      "updatedAt": "2025-09-16T10:17:32.614Z"
+    },
+    {
+      "id": 4,
+      "number": "104",
+      "floor": 1,
+      "type": "Suite",
+      "status": "OUT_OF_ORDER",
+      "updatedAt": "2025-09-16T09:17:32.614Z"
+    },
+    {
+      "id": 5,
+      "number": "201",
+      "floor": 2,
+      "type": "Standard",
+      "status": "CLEAN",
+      "updatedAt": "2025-09-16T12:17:32.614Z"
+    }
+  ],
+  "staff": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "department": "Housekeeping",
+      "position": "Supervisor",
+      "status": "Active",
+      "email": "alice.johnson@example.com",
+      "phone": "+1234567890",
+      "hireDate": "2022-01-15",
+      "performance": 92,
+      "schedule": "9:00 AM - 5:00 PM"
+    }
+  ],
+  "requests": [
+    {
+      "id": 1,
+      "guestName": "John Doe",
+      "roomNumber": "205",
+      "title": "Extra towels",
+      "department": "Housekeeping",
+      "priority": "MEDIUM",
+      "status": "PENDING",
+      "createdAt": "2025-09-16T11:17:32.614Z"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Luxury Towels",
+      "category": "Linens",
+      "quantity": 150,
+      "minStock": 100,
+      "supplier": "Premium Linens Co.",
+      "price": 12.99,
+      "lastOrdered": "2023-08-15"
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "Housekeeping",
+      "head": "Alice Johnson",
+      "staffCount": 5,
+      "performance": 92
+    }
+  ],
+  "activity": [
+    {
+      "id": 1,
+      "type": "request",
+      "title": "New guest request",
+      "description": "John Doe - Extra towels (Room 205)",
+      "timestamp": "2025-09-16T12:17:32.614Z",
+      "status": "PENDING"
+    }
+  ]
+}

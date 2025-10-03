@@ -1,0 +1,418 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@hospitalops.com",
+      "password": "password123",
+      "name": "Admin User",
+      "role": "ADMIN"
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "number": "101",
+      "floor": 1,
+      "type": "General Ward",
+      "status": "occupied",
+      "updatedAt": "2023-09-28T15:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "number": "102",
+      "floor": 1,
+      "type": "General Ward",
+      "status": "occupied",
+      "updatedAt": "2023-09-28T12:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "number": "103",
+      "floor": 1,
+      "type": "Private Room",
+      "status": "discharged",
+      "updatedAt": "2023-09-28T09:30:00.000Z"
+    },
+    {
+      "id": 4,
+      "number": "104",
+      "floor": 1,
+      "type": "ICU",
+      "status": "maintenance",
+      "updatedAt": "2023-09-28T06:30:00.000Z"
+    },
+    {
+      "id": 5,
+      "number": "201",
+      "floor": 2,
+      "type": "General Ward",
+      "status": "occupied",
+      "updatedAt": "2023-09-28T15:30:00.000Z"
+    },
+    {
+      "id": 6,
+      "number": "202",
+      "floor": 2,
+      "type": "General Ward",
+      "status": "occupied",
+      "updatedAt": "2023-09-28T12:30:00.000Z"
+    },
+    {
+      "id": 7,
+      "number": "203",
+      "floor": 2,
+      "type": "Private Room",
+      "status": "available",
+      "updatedAt": "2023-09-28T15:30:00.000Z"
+    },
+    {
+      "id": 8,
+      "number": "204",
+      "floor": 2,
+      "type": "Semi-Private",
+      "status": "occupied",
+      "updatedAt": "2023-09-28T12:30:00.000Z"
+    },
+    {
+      "id": 9,
+      "number": "301",
+      "floor": 3,
+      "type": "General Ward",
+      "status": "available",
+      "updatedAt": "2023-09-28T15:30:00.000Z"
+    },
+    {
+      "id": 10,
+      "number": "302",
+      "floor": 3,
+      "type": "General Ward",
+      "status": "available",
+      "updatedAt": "2023-09-28T12:30:00.000Z"
+    },
+    {
+      "id": 11,
+      "number": "303",
+      "floor": 3,
+      "type": "Private Room",
+      "status": "discharged",
+      "updatedAt": "2023-09-28T09:30:00.000Z"
+    },
+    {
+      "id": 12,
+      "number": "304",
+      "floor": 3,
+      "type": "Maternity Ward",
+      "status": "available",
+      "updatedAt": "2023-09-28T15:30:00.000Z"
+    }
+  ],
+  "staff": [
+    {
+      "id": 1,
+      "name": "Dr. Alice Johnson",
+      "department": "Cardiology",
+      "position": "Attending Physician",
+      "status": "Active",
+      "email": "alice.johnson@hospitalops.com",
+      "phone": "+1234567890",
+      "hireDate": "2022-01-15",
+      "performance": 92,
+      "schedule": "9:00 AM - 5:00 PM"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Bob Smith",
+      "department": "Surgery",
+      "position": "Surgeon",
+      "status": "Active",
+      "email": "bob.smith@hospitalops.com",
+      "phone": "+1234567891",
+      "hireDate": "2022-03-22",
+      "performance": 87,
+      "schedule": "9:00 AM - 5:00 PM"
+    },
+    {
+      "id": 3,
+      "name": "Nurse Carol Davis",
+      "department": "Emergency",
+      "position": "Registered Nurse",
+      "status": "Offline",
+      "email": "carol.davis@hospitalops.com",
+      "phone": "+1234567892",
+      "hireDate": "2021-11-05",
+      "performance": 95,
+      "schedule": "9:00 AM - 5:00 PM"
+    },
+    {
+      "id": 4,
+      "name": "Dr. David Wilson",
+      "department": "Orthopedics",
+      "position": "Consultant",
+      "status": "Active",
+      "email": "david.wilson@hospitalops.com",
+      "phone": "+1234567893",
+      "hireDate": "2020-07-18",
+      "performance": 88,
+      "schedule": "8:00 AM - 4:00 PM"
+    },
+    {
+      "id": 5,
+      "name": "Nurse Eva Brown",
+      "department": "ICU",
+      "position": "ICU Nurse",
+      "status": "Break",
+      "email": "eva.brown@hospitalops.com",
+      "phone": "+1234567894",
+      "hireDate": "2023-02-10",
+      "performance": 91,
+      "schedule": "8:00 AM - 4:00 PM"
+    },
+    {
+      "id": 6,
+      "name": "Dr. Frank Miller",
+      "department": "Internal Medicine",
+      "position": "Chief of Medicine",
+      "status": "Active",
+      "email": "frank.miller@hospitalops.com",
+      "phone": "+1234567895",
+      "hireDate": "2019-05-30",
+      "performance": 96,
+      "schedule": "7:00 AM - 3:00 PM"
+    },
+    {
+      "id": 7,
+      "name": "Nurse Grace Lee",
+      "department": "Pediatrics",
+      "position": "Staff Nurse",
+      "status": "Active",
+      "email": "grace.lee@hospitalops.com",
+      "phone": "+1234567896",
+      "hireDate": "2022-09-14",
+      "performance": 89,
+      "schedule": "7:00 AM - 3:00 PM"
+    },
+    {
+      "id": 8,
+      "name": "Dr. Henry Taylor",
+      "department": "Neurology",
+      "position": "Neurologist",
+      "status": "Active",
+      "email": "henry.taylor@hospitalops.com",
+      "phone": "+1234567897",
+      "hireDate": "2023-01-20",
+      "performance": 93,
+      "schedule": "7:00 AM - 3:00 PM"
+    },
+    {
+      "id": 9,
+      "name": "Nurse Ivy Chen",
+      "department": "ICU",
+      "position": "Critical Care Nurse",
+      "status": "Offline",
+      "email": "ivy.chen@hospitalops.com",
+      "phone": "+1234567898",
+      "hireDate": "2022-12-03",
+      "performance": 85,
+      "schedule": "7:00 AM - 3:00 PM"
+    },
+    {
+      "id": 10,
+      "name": "Dr. Jack Roberts",
+      "department": "Emergency",
+      "position": "ER Physician",
+      "status": "Active",
+      "email": "jack.roberts@hospitalops.com",
+      "phone": "+1234567899",
+      "hireDate": "2021-04-12",
+      "performance": 94,
+      "schedule": "6:00 AM - 2:00 PM"
+    },
+    {
+      "id": 11,
+      "name": "Dr. Kate Williams",
+      "department": "Administration",
+      "position": "Chief Medical Officer",
+      "status": "Active",
+      "email": "kate.williams@hospitalops.com",
+      "phone": "+1234567800",
+      "hireDate": "2020-09-08",
+      "performance": 97,
+      "schedule": "6:00 AM - 2:00 PM"
+    }
+  ],
+  "requests": [
+    {
+      "id": 1,
+      "guestName": "John Smith",
+      "roomNumber": "205",
+      "title": "Pain medication",
+      "department": "Pharmacy",
+      "priority": "HIGH",
+      "status": "PENDING",
+      "createdAt": "2023-09-28T12:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "guestName": "Jane Doe",
+      "roomNumber": "108",
+      "title": "Lab test - Complete Blood Count",
+      "department": "Laboratory",
+      "priority": "MEDIUM",
+      "status": "IN_PROGRESS",
+      "createdAt": "2023-09-28T09:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "guestName": "Robert Johnson",
+      "roomNumber": "210",
+      "title": "X-ray - Chest",
+      "department": "Radiology",
+      "priority": "URGENT",
+      "status": "PENDING",
+      "createdAt": "2023-09-28T06:30:00.000Z"
+    },
+    {
+      "id": 4,
+      "guestName": "Emily Wilson",
+      "roomNumber": "302",
+      "title": "Dietary consultation",
+      "department": "Nutrition",
+      "priority": "LOW",
+      "status": "COMPLETED",
+      "createdAt": "2023-09-28T03:30:00.000Z",
+      "completedAt": "2023-09-28T05:30:00.000Z"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Surgical Masks",
+      "category": "Medical Supplies",
+      "quantity": 1500,
+      "minStock": 500,
+      "supplier": "Medical Supply Co.",
+      "price": 0.50,
+      "lastOrdered": "2023-08-15"
+    },
+    {
+      "id": 2,
+      "name": "N95 Respirators",
+      "category": "Medical Supplies",
+      "quantity": 850,
+      "minStock": 300,
+      "supplier": "Healthcare Essentials",
+      "price": 2.50,
+      "lastOrdered": "2023-08-20"
+    },
+    {
+      "id": 3,
+      "name": "Syringes 10ml",
+      "category": "Medical Equipment",
+      "quantity": 1200,
+      "minStock": 400,
+      "supplier": "MediTech Supply",
+      "price": 0.75,
+      "lastOrdered": "2023-09-01"
+    },
+    {
+      "id": 4,
+      "name": "IV Fluid Bags",
+      "category": "Medical Supplies",
+      "quantity": 500,
+      "minStock": 200,
+      "supplier": "IV Solutions Inc.",
+      "price": 1.25,
+      "lastOrdered": "2023-08-25"
+    },
+    {
+      "id": 5,
+      "name": "Thermometers",
+      "category": "Medical Equipment",
+      "quantity": 75,
+      "minStock": 30,
+      "supplier": "Diagnostic Tools Ltd.",
+      "price": 8.99,
+      "lastOrdered": "2023-07-30"
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "Cardiology",
+      "head": "Dr. Alice Johnson",
+      "staffCount": 8,
+      "performance": 92
+    },
+    {
+      "id": 2,
+      "name": "Surgery",
+      "head": "Dr. Bob Smith",
+      "staffCount": 12,
+      "performance": 88
+    },
+    {
+      "id": 3,
+      "name": "Emergency",
+      "head": "Dr. Jack Roberts",
+      "staffCount": 15,
+      "performance": 93
+    },
+    {
+      "id": 4,
+      "name": "Internal Medicine",
+      "head": "Dr. Frank Miller",
+      "staffCount": 10,
+      "performance": 94
+    }
+  ],
+  "activity": [
+    {
+      "id": 1,
+      "type": "request",
+      "title": "New medical request",
+      "description": "John Smith - Pain medication (Room 205)",
+      "timestamp": "2023-09-28T15:30:00.000Z",
+      "status": "PENDING"
+    },
+    {
+      "id": 2,
+      "type": "room",
+      "title": "Room status updated",
+      "description": "Room 302 marked as Clean",
+      "timestamp": "2023-09-28T12:30:00.000Z",
+      "status": "clean"
+    },
+    {
+      "id": 3,
+      "type": "request",
+      "title": "Request completed",
+      "description": "Jane Doe - Lab test (Room 108)",
+      "timestamp": "2023-09-28T09:30:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": 4,
+      "type": "room",
+      "title": "Room status updated",
+      "description": "Room 104 marked as Maintenance",
+      "timestamp": "2023-09-28T06:30:00.000Z",
+      "status": "maintenance"
+    },
+    {
+      "id": 5,
+      "type": "request",
+      "title": "New radiology request",
+      "description": "Robert Johnson - X-ray (Room 210)",
+      "timestamp": "2023-09-28T03:30:00.000Z",
+      "status": "PENDING"
+    },
+    {
+      "id": 6,
+      "type": "staff",
+      "title": "Staff checked in",
+      "description": "Dr. Alice Johnson started shift",
+      "timestamp": "2023-09-28T00:30:00.000Z",
+      "status": "ACTIVE"
+    }
+  ]
+}

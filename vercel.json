@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "public": false,
+  "github": {
+    "silent": true
+  },
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "includeFiles": [
+          "frontend/next.config.js",
+          "frontend/public/**",
+          "frontend/.next/**",
+          "frontend/node_modules/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ]
+}

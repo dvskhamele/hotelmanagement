@@ -11,7 +11,7 @@ export default function Requests() {
   const [filteredRequests, setFilteredRequests] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedStatus, setSelectedStatus] = useState('all')
-  const [selectedDepartment, setSelectedDepartment] = useState('all')
+  const [selectedType, setSelectedType] = useState('all')
   const [selectedPriority, setSelectedPriority] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [isMobile, setIsMobile] = useState(false)
@@ -31,14 +31,14 @@ export default function Requests() {
     // Load mock data
     setTimeout(() => {
       const mockRequests = [
-        { id: 1, patientId: 'P001', patientName: 'John Smith', roomNumber: '201', department: 'Housekeeping', title: 'Clean room', description: 'Need room cleaning urgently', priority: 'High', status: 'Pending', timestamp: new Date(Date.now() - 3600000).toISOString(), assignedTo: 'Nurse Alice' },
-        { id: 2, patientId: 'P002', patientName: 'Sarah Johnson', roomNumber: '203', department: 'Maintenance', title: 'AC not working', description: 'Room AC is malfunctioning', priority: 'Medium', status: 'In Progress', timestamp: new Date(Date.now() - 1800000).toISOString(), assignedTo: 'Technician Bob' },
-        { id: 3, patientId: 'P003', patientName: 'Robert Williams', roomNumber: '301', department: 'Food Service', title: 'Special dietary request', description: 'Patient requested low sodium meals', priority: 'Low', status: 'Completed', timestamp: new Date(Date.now() - 7200000).toISOString(), assignedTo: 'Chef Carol' },
-        { id: 4, patientId: 'P004', patientName: 'Emily Davis', roomNumber: '305', department: 'Medical', title: 'Medication reminder', description: 'Patient needs medication at 4 PM', priority: 'High', status: 'Pending', timestamp: new Date(Date.now() - 14400000).toISOString(), assignedTo: 'Dr. Mike' },
-        { id: 5, patientId: 'P005', patientName: 'Michael Brown', roomNumber: '401', department: 'Security', title: 'Visitor request', description: 'Patient wants to receive visitors', priority: 'Low', status: 'Completed', timestamp: new Date(Date.now() - 21600000).toISOString(), assignedTo: 'Guard David' },
-        { id: 6, patientId: 'P006', patientName: 'Jennifer Wilson', roomNumber: '405', department: 'Housekeeping', title: 'Extra towels', description: 'Patient requested extra towels and blankets', priority: 'Medium', status: 'In Progress', timestamp: new Date(Date.now() - 900000).toISOString(), assignedTo: 'Staff Emma' },
-        { id: 7, patientId: 'P007', patientName: 'David Miller', roomNumber: '501', department: 'Pharmacy', title: 'Medicine refill', description: 'Patient needs prescription refill', priority: 'High', status: 'Pending', timestamp: new Date(Date.now() - 600000).toISOString(), assignedTo: 'Pharmacist John' },
-        { id: 8, patientId: 'P008', patientName: 'Lisa Taylor', roomNumber: '503', department: 'Medical', title: 'Physical therapy', description: 'Patient needs physical therapy session', priority: 'Medium', status: 'Completed', timestamp: new Date(Date.now() - 28800000).toISOString(), assignedTo: 'Therapist Susan' }
+        { id: 1, clientId: 'C001', clientName: 'John Smith', clientEmail: 'john.smith@example.com', type: 'KYC', title: 'PAN Verification', description: 'Client submitted PAN document for verification', priority: 'High', status: 'Pending', timestamp: new Date(Date.now() - 3600000).toISOString(), assignedTo: 'Compliance Officer Alice' },
+        { id: 2, clientId: 'C002', clientName: 'Sarah Johnson', clientEmail: 'sarah.j@example.com', type: 'Subscription', title: 'Premium Plan Upgrade', description: 'Client requested upgrade from Basic to Premium plan', priority: 'Medium', status: 'In Progress', timestamp: new Date(Date.now() - 1800000).toISOString(), assignedTo: 'Account Manager Bob' },
+        { id: 3, clientId: 'C003', clientName: 'Robert Williams', clientEmail: 'robert.w@example.com', type: 'KYC', title: 'Bank Statement Upload', description: 'Client requested reminder to upload bank statement', priority: 'Low', status: 'Completed', timestamp: new Date(Date.now() - 7200000).toISOString(), assignedTo: 'Client Support Carol' },
+        { id: 4, clientId: 'C004', clientName: 'Emily Davis', clientEmail: 'emily.d@example.com', type: 'Signal', title: 'Delivery Preference', description: 'Client needs signals via WhatsApp instead of email', priority: 'High', status: 'Pending', timestamp: new Date(Date.now() - 14400000).toISOString(), assignedTo: 'Technical Support Mike' },
+        { id: 5, clientId: 'C005', clientName: 'Michael Brown', clientEmail: 'michael.b@example.com', type: 'Subscription', title: 'Plan Renewal', description: 'Client plan expires in 3 days, sent renewal notice', priority: 'High', status: 'Completed', timestamp: new Date(Date.now() - 21600000).toISOString(), assignedTo: 'Sales Executive David' },
+        { id: 6, clientId: 'C006', clientName: 'Jennifer Wilson', clientEmail: 'jennifer.w@example.com', type: 'KYC', title: 'Address Proof Verification', description: 'Client submitted address proof document for verification', priority: 'Medium', status: 'In Progress', timestamp: new Date(Date.now() - 900000).toISOString(), assignedTo: 'Compliance Officer Emma' },
+        { id: 7, clientId: 'C007', clientName: 'David Miller', clientEmail: 'david.m@example.com', type: 'Subscription', title: 'VIP Plan Inquiry', description: 'Client inquired about VIP plan benefits and pricing', priority: 'Medium', status: 'Pending', timestamp: new Date(Date.now() - 600000).toISOString(), assignedTo: 'Sales Executive John' },
+        { id: 8, clientId: 'C008', clientName: 'Lisa Taylor', clientEmail: 'lisa.t@example.com', type: 'KYC', title: 'Aadhaar Verification', description: 'Client submitted Aadhaar for identity verification', priority: 'High', status: 'Completed', timestamp: new Date(Date.now() - 28800000).toISOString(), assignedTo: 'Compliance Officer Susan' }
       ]
       
       setRequests(mockRequests)
@@ -59,8 +59,8 @@ export default function Requests() {
       result = result.filter(request => request.status === selectedStatus)
     }
     
-    if (selectedDepartment !== 'all') {
-      result = result.filter(request => request.department === selectedDepartment)
+    if (selectedType !== 'all') {
+      result = result.filter(request => request.type === selectedType)
     }
     
     if (selectedPriority !== 'all') {
@@ -70,15 +70,15 @@ export default function Requests() {
     if (searchTerm) {
       const term = searchTerm.toLowerCase()
       result = result.filter(request => 
-        request.patientName.toLowerCase().includes(term) ||
+        request.clientName.toLowerCase().includes(term) ||
         request.title.toLowerCase().includes(term) ||
         request.description.toLowerCase().includes(term) ||
-        request.roomNumber.toLowerCase().includes(term)
+        request.clientEmail.toLowerCase().includes(term)
       )
     }
     
     setFilteredRequests(result)
-  }, [selectedStatus, selectedDepartment, selectedPriority, searchTerm, requests])
+  }, [selectedStatus, selectedType, selectedPriority, searchTerm, requests])
 
   // Render mobile requests page for small screens
   if (isMobile) {
@@ -93,6 +93,10 @@ export default function Requests() {
       case 'In Progress':
         return 'bg-amber-100 text-amber-800'
       case 'Pending':
+        return 'bg-rose-100 text-rose-800'
+      case 'Verified':
+        return 'bg-emerald-100 text-emerald-800'
+      case 'Rejected':
         return 'bg-rose-100 text-rose-800'
       default:
         return 'bg-slate-100 text-slate-800'
@@ -113,21 +117,17 @@ export default function Requests() {
     }
   }
 
-  // Department badge class
-  const getDepartmentClass = (department: string) => {
-    switch (department) {
-      case 'Medical':
+  // Type badge class
+  const getTypeClass = (type: string) => {
+    switch (type) {
+      case 'KYC':
         return 'bg-blue-100 text-blue-800'
-      case 'Housekeeping':
+      case 'Subscription':
         return 'bg-purple-100 text-purple-800'
-      case 'Maintenance':
-        return 'bg-amber-100 text-amber-800'
-      case 'Food Service':
-        return 'bg-emerald-100 text-emerald-800'
-      case 'Pharmacy':
+      case 'Signal':
         return 'bg-indigo-100 text-indigo-800'
-      case 'Security':
-        return 'bg-rose-100 text-rose-800'
+      case 'Compliance':
+        return 'bg-amber-100 text-amber-800'
       default:
         return 'bg-slate-100 text-slate-800'
     }
@@ -155,8 +155,8 @@ export default function Requests() {
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">Medical Requests Management</h2>
-            <p className="text-slate-600">Track and manage patient requests across all departments</p>
+            <h2 className="text-2xl font-bold text-slate-800">Client Requests Management</h2>
+            <p className="text-slate-600">Track and manage client requests across all services</p>
           </div>
         </div>
 
@@ -188,7 +188,7 @@ export default function Requests() {
               <input
                 type="text"
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 bg-white"
-                placeholder="Patient, room, or request"
+                placeholder="Client, email, or request"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -205,23 +205,23 @@ export default function Requests() {
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
+                <option value="Verified">Verified</option>
+                <option value="Rejected">Rejected</option>
               </select>
             </div>
             <div>
-              <label htmlFor="departmentFilter" className="block text-sm font-medium text-slate-700 mb-1">Department</label>
+              <label htmlFor="typeFilter" className="block text-sm font-medium text-slate-700 mb-1">Type</label>
               <select
-                id="departmentFilter"
+                id="typeFilter"
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 bg-white"
-                value={selectedDepartment}
-                onChange={(e) => setSelectedDepartment(e.target.value)}
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
               >
-                <option value="all">All Departments</option>
-                <option value="Medical">Medical</option>
-                <option value="Housekeeping">Housekeeping</option>
-                <option value="Maintenance">Maintenance</option>
-                <option value="Food Service">Food Service</option>
-                <option value="Pharmacy">Pharmacy</option>
-                <option value="Security">Security</option>
+                <option value="all">All Types</option>
+                <option value="KYC">KYC</option>
+                <option value="Subscription">Subscription</option>
+                <option value="Signal">Signal</option>
+                <option value="Compliance">Compliance</option>
               </select>
             </div>
             <div>
@@ -243,7 +243,7 @@ export default function Requests() {
                 className="w-full bg-slate-100 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300"
                 onClick={() => {
                   setSelectedStatus('all')
-                  setSelectedDepartment('all')
+                  setSelectedType('all')
                   setSelectedPriority('all')
                   setSearchTerm('')
                 }}
@@ -270,7 +270,7 @@ export default function Requests() {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-bold text-slate-800">{request.title}</h3>
-                  <p className="text-sm text-slate-600">Room {request.roomNumber} • {request.patientName}</p>
+                  <p className="text-sm text-slate-600">{request.clientEmail} • {request.clientName}</p>
                 </div>
                 <div className="flex space-x-2">
                   <span className={`px-2 py-1 text-xs rounded-full ${getPriorityClass(request.priority)}`}>
@@ -288,8 +288,8 @@ export default function Requests() {
               
               <div className="mt-4 flex justify-between items-center">
                 <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 text-xs rounded-full ${getDepartmentClass(request.department)}`}>
-                    {request.department}
+                  <span className={`px-2 py-1 text-xs rounded-full ${getTypeClass(request.type)}`}>
+                    {request.type}
                   </span>
                   <span className="text-xs text-slate-500">
                     {new Date(request.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -308,6 +308,8 @@ export default function Requests() {
                     <option value="Pending">Pending</option>
                     <option value="In Progress">In Progress</option>
                     <option value="Completed">Completed</option>
+                    <option value="Verified">Verified</option>
+                    <option value="Rejected">Rejected</option>
                   </select>
                 </div>
               </div>
@@ -321,10 +323,10 @@ export default function Requests() {
             <table className="min-w-full divide-y divide-slate-200">
               <thead className="bg-slate-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Room</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Client</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Request</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Department</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Priority</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Assigned To</th>
@@ -337,16 +339,16 @@ export default function Requests() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white font-bold">{request.patientName.charAt(0)}</span>
+                          <span className="text-white font-bold">{request.clientName.charAt(0)}</span>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-slate-900">{request.patientName}</div>
-                          <div className="text-sm text-slate-500">ID: {request.patientId}</div>
+                          <div className="text-sm font-medium text-slate-900">{request.clientName}</div>
+                          <div className="text-sm text-slate-500">ID: {request.clientId}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                      {request.roomNumber}
+                      {request.clientEmail}
                     </td>
                     <td className="px-6 py-4">
                       <div>
@@ -355,8 +357,8 @@ export default function Requests() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getDepartmentClass(request.department)}`}>
-                        {request.department}
+                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeClass(request.type)}`}>
+                        {request.type}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -382,6 +384,8 @@ export default function Requests() {
                           <option value="Pending">Pending</option>
                           <option value="In Progress">In Progress</option>
                           <option value="Completed">Completed</option>
+                          <option value="Verified">Verified</option>
+                          <option value="Rejected">Rejected</option>
                         </select>
                       </div>
                     </td>

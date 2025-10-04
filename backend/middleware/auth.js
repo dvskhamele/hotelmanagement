@@ -1,13 +1,21 @@
 // Authentication middleware
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-// Mock user database for prototype
+// Define SEBI-compliant user roles
+const UserRoles = {
+  ADMIN: 'ADMIN',
+  ONBOARDING_AGENT: 'ONBOARDING_AGENT',
+  RESEARCH_ANALYST: 'RESEARCH_ANALYST',
+  COMPLIANCE_OFFICER: 'COMPLIANCE_OFFICER'
+};
+
+// Mock user database for prototype - Updated for AdvisorX CRM with SEBI-compliant roles
 const mockUsers = [
-  { id: 1, email: 'admin@example.com', password: 'admin123', role: 'ADMIN' },
-  { id: 2, email: 'manager@example.com', password: 'manager123', role: 'MANAGER' },
-  { id: 3, email: 'supervisor@example.com', password: 'supervisor123', role: 'SUPERVISOR' },
-  { id: 4, email: 'staff@example.com', password: 'staff123', role: 'STAFF' },
-  { id: 5, email: 'housekeeping@example.com', password: 'housekeeping123', role: 'HOUSEKEEPING' }
+  { id: 1, email: 'admin@advisorx.com', password: 'admin123', role: UserRoles.ADMIN },
+  { id: 2, email: 'onboarding@advisorx.com', password: 'onboarding123', role: UserRoles.ONBOARDING_AGENT },
+  { id: 3, email: 'analyst@advisorx.com', password: 'analyst123', role: UserRoles.RESEARCH_ANALYST },
+  { id: 4, email: 'compliance@advisorx.com', password: 'compliance123', role: UserRoles.COMPLIANCE_OFFICER },
+  { id: 5, email: 'telecaller@advisorx.com', password: 'telecaller123', role: UserRoles.ONBOARDING_AGENT }
 ];
 
 // Authentication middleware - more permissive for prototype
@@ -47,7 +55,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// Authorization middleware - more permissive for prototype
+// Authorization middleware - SEBI-compliant role-based access control
 const authorize = (roles = []) => {
   // roles param can be a single role string or an array of roles
   if (typeof roles === 'string') {
@@ -55,19 +63,14 @@ const authorize = (roles = []) => {
   }
   
   return (req, res, next) => {
-    // For prototype, we'll be more permissive and allow all requests
-    // In a real implementation, we would check user permissions
-    
-    /*
     if (!req.user) {
       return res.status(401).json({ error: 'Authentication required' });
     }
     
     // Check if user's role is included in authorized roles
     if (roles.length && !roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Insufficient permissions' });
+      return res.status(403).json({ error: `Insufficient permissions. Required roles: ${roles.join(', ')}` });
     }
-    */
     
     next();
   };
@@ -102,9 +105,10 @@ const login = (req, res) => {
   }
 };
 
-module.exports = {
+export {
   authenticate,
   authorize,
   login,
-  mockUsers
+  mockUsers,
+  UserRoles
 };

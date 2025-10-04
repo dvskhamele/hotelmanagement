@@ -13,13 +13,13 @@ export default function Dashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [stats, setStats] = useState({
-    pendingRequests: 0,
+    pendingKycRequests: 0,
     activeClients: 0,
     premiumSubscribers: 0,
     revenueToday: 0,
     subscriptionRate: 0,
     advisorsActive: 0,
-    kycRequests: 0,
+    pendingSignals: 0,
     avgResponseTime: 0,
     clientSatisfaction: 0
   })
@@ -306,8 +306,14 @@ export default function Dashboard() {
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800">Good morning, {user?.name}</h1>
-              <p className="text-slate-600">Here's what's happening with AdvisorX CRM today.</p>
+              <div>
+                <h1 className="text-3xl font-bold text-slate-800">Good morning, {user?.name}</h1>
+                <p className="text-slate-600">Here's what's happening with AdvisorX CRM today.</p>
+                <div className="mt-3 text-xs text-slate-500 bg-blue-50 p-3 rounded border border-blue-200">
+                  <div className="font-semibold text-blue-800">SEBI Compliance Overview:</div>
+                  <div className="mt-1">This dashboard provides a quick overview of your SEBI-compliant operations. All activities are automatically logged to meet SEBI's audit requirements.</div>
+                </div>
+              </div>
             </div>
             <div className="mt-4 md:mt-0">
               <div className="flex items-center space-x-2">

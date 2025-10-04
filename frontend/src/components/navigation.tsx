@@ -5,12 +5,50 @@ import { usePathname } from 'next/navigation'
 
 export default function Navigation() {
   const pathname = usePathname()
+  const userRole = typeof window !== 'undefined' ? 
+    JSON.parse(localStorage.getItem('currentUser') || '{}').role : 
+    null
 
-  const navigation = [
-    { name: 'AdvisorX Dashboard', href: '/dashboard' },
-    { name: 'Clients', href: '/clients' },
-    { name: 'KYC Requests', href: '/requests' },
-  ]
+  // Define navigation based on user role
+  let navigation = []
+  
+  switch(userRole) {
+    case 'ONBOARDING_AGENT':
+      navigation = [
+        { name: 'Telecaller Dashboard', href: '/telecaller-dashboard' },
+        { name: 'My Prospects', href: '/prospects' },
+        { name: 'Client Search', href: '/clients' },
+      ]
+      break
+    case 'RESEARCH_ANALYST':
+      navigation = [
+        { name: 'Advisory Delivery', href: '/advisory-delivery' },
+        { name: 'My Clients', href: '/clients' },
+        { name: 'Market Research', href: '/research' },
+      ]
+      break
+    case 'COMPLIANCE_OFFICER':
+      navigation = [
+        { name: 'Compliance Dashboard', href: '/dashboard' },
+        { name: 'Audit Logs', href: '/compliance-reports' },
+        { name: 'Client Records', href: '/clients' },
+      ]
+      break
+    case 'ADMIN':
+      navigation = [
+        { name: 'Admin Dashboard', href: '/dashboard' },
+        { name: 'User Management', href: '/admin/users' },
+        { name: 'Compliance Reports', href: '/compliance-reports' },
+        { name: 'Templates', href: '/admin/templates' },
+      ]
+      break
+    default:
+      navigation = [
+        { name: 'AdvisorX Dashboard', href: '/dashboard' },
+        { name: 'Clients', href: '/clients' },
+        { name: 'KYC Requests', href: '/requests' },
+      ]
+  }
 
   return (
     <nav className="bg-white shadow">
@@ -25,11 +63,10 @@ export default function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`${
-                    pathname === item.href
-                      ? 'border-blue-500 text-gray-900'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  className={`${pathname === item.href
+                    ? 'border-blue-500 text-gray-900'
+                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                 >
                   {item.name}
                 </Link>

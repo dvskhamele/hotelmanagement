@@ -7,7 +7,7 @@ echo "🏥 HospitalOps Vercel Deployment Script"
 echo "======================================="
 
 # Check if we're in the right directory
-BASE_DIR="/Users/test/startups/hospitalmanagement/hospital-ops-app"
+BASE_DIR="/Users/test/startups/advisorymanagement"
 if [ ! -d "$BASE_DIR" ]; then
     echo "❌ Error: HospitalOps directory not found at $BASE_DIR"
     exit 1

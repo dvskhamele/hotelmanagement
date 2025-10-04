@@ -1,28 +1,46 @@
 // Notification Service - Handles sending notifications to users
+import fs from 'fs';
+import path from 'path';
+
+const __dirname = path.dirname(new URL(import.meta.url).href);
+
 class NotificationService {
   constructor() {
+    this.dataDir = path.join(__dirname, '../data');
+    this.notificationsFile = path.join(this.dataDir, 'notifications.json');
+    this.ensureDataDirectory();
     // Initialize with default notifications if not exists
     this.initializeNotifications();
   }
 
-  // Initialize default notifications in localStorage
-  initializeNotifications() {
-    // Check if we already have notifications
-    if (!localStorage.getItem('notifications')) {
-      const initialNotifications = [];
-      localStorage.setItem('notifications', JSON.stringify(initialNotifications));
+  // Create data directory if it doesn't exist
+  ensureDataDirectory() {
+    if (!fs.existsSync(this.dataDir)) {
+      fs.mkdirSync(this.dataDir, { recursive: true });
     }
   }
 
-  // Get all notifications from localStorage
+  // Initialize default notifications in file system
+  initializeNotifications() {
+    // Check if we already have notifications
+    if (!fs.existsSync(this.notificationsFile)) {
+      const initialNotifications = [];
+      fs.writeFileSync(this.notificationsFile, JSON.stringify(initialNotifications, null, 2));
+    }
+  }
+
+  // Get all notifications from file system
   getNotifications() {
-    const notifications = localStorage.getItem('notifications');
+    if (!fs.existsSync(this.notificationsFile)) {
+      return [];
+    }
+    const notifications = fs.readFileSync(this.notificationsFile, 'utf8');
     return notifications ? JSON.parse(notifications) : [];
   }
 
-  // Save notifications to localStorage
+  // Save notifications to file system
   saveNotifications(notifications) {
-    localStorage.setItem('notifications', JSON.stringify(notifications));
+    fs.writeFileSync(this.notificationsFile, JSON.stringify(notifications, null, 2));
   }
 
   // Create a new notification

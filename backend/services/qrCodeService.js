@@ -1,5 +1,5 @@
 // QR Code Service
-const QRCode = require('qrcode');
+import QRCode from 'qrcode';
 
 class QRCodeService {
   constructor() {
@@ -74,4 +74,4 @@ class QRCodeService {
   }
 }
 
-module.exports = QRCodeService;
+export default QRCodeService;

@@ -16,9 +16,9 @@ const BackgroundSyncHandler: React.FC = () => {
           // Type assertion to avoid TypeScript error
           const swRegistration: any = await navigator.serviceWorker.ready
           await swRegistration.sync.register('sync-dashboard-data')
-          console.log('[PWA] Background sync registered')
+          // console.log('[PWA] Background sync registered')
         } catch (error) {
-          console.error('[PWA] Background sync registration failed:', error)
+          // console.error('[PWA] Background sync registration failed:', error)
         }
       }
     }
@@ -36,10 +36,10 @@ const BackgroundSyncHandler: React.FC = () => {
             await swRegistration.periodicSync.register('update-dashboard', {
               minInterval: 24 * 60 * 60 * 1000 // 24 hours
             })
-            console.log('[PWA] Periodic sync registered')
+            // console.log('[PWA] Periodic sync registered')
           }
         } catch (error) {
-          console.error('[PWA] Periodic sync registration failed:', error)
+          // console.error('[PWA] Periodic sync registration failed:', error)
         }
       }
     }

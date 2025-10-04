@@ -120,4 +120,4 @@ class RequestService {
   }
 }
 
-module.exports = RequestService;
+export default RequestService;

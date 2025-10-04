@@ -1,9 +1,10 @@
 // WebSocket server for real-time updates
-const WebSocket = require('ws');
+import { WebSocketServer as WSServer } from 'ws';
+import http from 'http';
 
 class WebSocketServer {
   constructor(server) {
-    this.wss = new WebSocket.Server({ server });
+    this.wss = new WSServer({ server });
     this.clients = new Map(); // Store connected clients with their roles
     
     this.initialize();
@@ -151,4 +152,4 @@ class WebSocketServer {
   }
 }
 
-module.exports = WebSocketServer;
+export default WebSocketServer;

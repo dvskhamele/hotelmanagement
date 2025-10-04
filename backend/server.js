@@ -1,26 +1,28 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const http = require('http');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import http from 'http';
 
 // Load environment variables
 dotenv.config();
 
-// Import services
-const LocalStorageService = require('./services/localStorageService');
-const PMSIntegrationService = require('./services/pmsIntegrationService');
-const NotificationService = require('./services/notificationService');
-const WebSocketServer = require('./websocketServer');
+// Import services that are singletons
+const localStorageService = (await import('./services/localStorageService.js')).default;
+const pmsService = (await import('./services/pmsIntegrationService.js')).default;
+const notificationService = (await import('./services/notificationService.js')).default;
+const auditService = (await import('./services/auditService.js')).default;
+const clientService = (await import('./services/clientService.js')).default;
+const callingService = (await import('./services/callingService.js')).default;
+const messageService = (await import('./services/messageService.js')).default;
+
+// Import WebSocketServer class that needs to be instantiated
+const WebSocketServerClass = (await import('./websocketServer.js')).default;
+const { UserRoles } = await import('./middleware/auth.js');
 
 // Import middleware
-const { authenticate, authorize, login } = require('./middleware/auth');
-
-// Initialize services
-const localStorageService = new LocalStorageService();
-const pmsService = new PMSIntegrationService(process.env.PMS_API_URL, process.env.PMS_API_KEY);
-const notificationService = new NotificationService();
+const { authenticate, authorize, login } = await import('./middleware/auth.js');
 
 // Create Express app
 const app = express();
@@ -28,7 +30,7 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 
 // Initialize WebSocket server
-const wsServer = new WebSocketServer(server);
+const wsServer = new WebSocketServerClass(server);
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -419,9 +421,400 @@ app.put('/api/notifications/read-all', (req, res) => {
   }
 });
 
+// New AdvisorX CRM API routes for SEBI compliance
+
+// Client management routes
+app.get('/api/clients', async (req, res) => {
+  try {
+    // Check role permissions
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const result = await clientService.getAllClients();
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/clients/:id', async (req, res) => {
+  try {
+    // Check role permissions
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const result = await clientService.getClientById(parseInt(req.params.id));
+    if (result.success) {
+      // Log client profile view
+      await auditService.logClientProfileView(
+        req.user.id,
+        req.user.role,
+        parseInt(req.params.id),
+        req.ip,
+        req.get('User-Agent')
+      );
+      res.json(result);
+    } else {
+      res.status(404).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/clients', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT, RESEARCH_ANALYST, or ADMIN can create prospects
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const result = await clientService.createProspect(req.body, req.user.id, req.ip, req.get('User-Agent'));
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// KYC management routes
+app.put('/api/clients/:id/kyc', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT, COMPLIANCE_OFFICER, or ADMIN can update KYC
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { status, verificationDate, kycDetails } = req.body;
+    const result = await clientService.updateKYCStatus(
+      parseInt(req.params.id), 
+      req.user.id, 
+      status, 
+      verificationDate, 
+      kycDetails, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Agreement management routes
+app.put('/api/clients/:id/agreement', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT, COMPLIANCE_OFFICER, or ADMIN can manage agreements
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { status, agreementUrl } = req.body;
+    
+    if (status === 'SENT') {
+      const result = await clientService.sendAgreement(
+        parseInt(req.params.id), 
+        req.user.id, 
+        agreementUrl, 
+        req.ip, 
+        req.get('User-Agent')
+      );
+      res.json(result);
+    } else if (status === 'SIGNED') {
+      const result = await clientService.updateAgreementStatus(
+        parseInt(req.params.id), 
+        req.user.id, 
+        status, 
+        req.ip, 
+        req.get('User-Agent')
+      );
+      res.json(result);
+    } else {
+      res.status(400).json({ error: 'Invalid agreement status' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Payment management routes
+app.put('/api/clients/:id/payment', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT, COMPLIANCE_OFFICER, or ADMIN can manage payments
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { status, subscriptionPlan, amount } = req.body;
+    const result = await clientService.updatePaymentStatus(
+      parseInt(req.params.id), 
+      req.user.id, 
+      status, 
+      subscriptionPlan, 
+      amount, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Calling routes
+app.post('/api/calls', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT or ADMIN can initiate calls
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { clientId } = req.body;
+    const result = await callingService.initiateCall(
+      req.user.id, 
+      clientId, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/calls/:id/disposition', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT or ADMIN can update call disposition
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { disposition, notes, clientId } = req.body;
+    const result = await callingService.updateCallDisposition(
+      parseInt(req.params.id), 
+      req.user.id, 
+      disposition, 
+      clientId, 
+      notes, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Message template routes
+app.get('/api/message-templates', async (req, res) => {
+  try {
+    // Only RESEARCH_ANALYST, COMPLIANCE_OFFICER, or ADMIN can access templates
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.RESEARCH_ANALYST && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const result = await messageService.getActiveTemplates();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/message-templates/:id', async (req, res) => {
+  try {
+    // Only RESEARCH_ANALYST, COMPLIANCE_OFFICER, or ADMIN can access templates
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.RESEARCH_ANALYST && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const result = await messageService.getTemplateById(parseInt(req.params.id));
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(404).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/message-templates', async (req, res) => {
+  try {
+    // Only COMPLIANCE_OFFICER or ADMIN can create templates
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { name, body } = req.body;
+    const result = await messageService.createTemplate(
+      name, 
+      body, 
+      req.user.id, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/message-templates/:id', async (req, res) => {
+  try {
+    // Only COMPLIANCE_OFFICER or ADMIN can update templates
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { name, body, isActive } = req.body;
+    const result = await messageService.updateTemplate(
+      parseInt(req.params.id), 
+      name, 
+      body, 
+      isActive, 
+      req.user.id, 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Send advisory message route
+app.post('/api/messages', async (req, res) => {
+  try {
+    // Only RESEARCH_ANALYST or ADMIN can send messages
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.RESEARCH_ANALYST) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { clientId, templateId, templateData, messageType } = req.body;
+    const result = await messageService.sendAdvisoryMessage(
+      req.user.id, 
+      clientId, 
+      templateId, 
+      templateData, 
+      messageType || 'WHATSAPP', 
+      req.ip, 
+      req.get('User-Agent')
+    );
+    
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Dashboard stats for telecaller dashboard
+app.get('/api/dashboard/telecaller-stats', async (req, res) => {
+  try {
+    // Only ONBOARDING_AGENT, COMPLIANCE_OFFICER, or ADMIN can access dashboard stats
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.ONBOARDING_AGENT && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const stats = clientService.getClientsByStatus();
+    
+    // Add call statistics
+    const callStats = callingService.getCallDispositionsSummary();
+    
+    res.json({ 
+      clientStats: stats,
+      callStats: callStats
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Compliance reporting routes
+app.get('/api/compliance/audit-logs', async (req, res) => {
+  try {
+    // Only COMPLIANCE_OFFICER or ADMIN can access audit logs
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { userId, clientId, actionType, dateFrom, dateTo, limit } = req.query;
+    const filters = {};
+    
+    if (userId) filters.userId = parseInt(userId);
+    if (clientId) filters.clientId = parseInt(clientId);
+    if (actionType) filters.actionType = actionType;
+    if (dateFrom) filters.dateFrom = dateFrom;
+    if (dateTo) filters.dateTo = dateTo;
+    if (limit) filters.limit = parseInt(limit);
+    
+    const logs = await auditService.getAuditLogs(filters);
+    res.json({ logs });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/compliance/generate-audit-report', async (req, res) => {
+  try {
+    // Only COMPLIANCE_OFFICER or ADMIN can generate reports
+    if (req.user.role !== UserRoles.ADMIN && req.user.role !== UserRoles.COMPLIANCE_OFFICER) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
+    
+    const { dateFrom, dateTo } = req.body;
+    const report = await auditService.generateComplianceAuditReport(dateFrom, dateTo);
+    res.json({ report });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`AdvisorX CRM Server is running on port ${PORT}`);
 });
 
 module.exports = app;

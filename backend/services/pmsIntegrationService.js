@@ -147,4 +147,6 @@ class PMSIntegrationService {
   }
 }
 
-module.exports = PMSIntegrationService;
+// Export as a singleton
+const pmsService = new PMSIntegrationService();
+export default pmsService;

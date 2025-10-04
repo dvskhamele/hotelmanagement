@@ -1,4 +1,4 @@
-// API Service for Hotel Operations Management
+// API Service for AdvisorX CRM System
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 
                      (typeof window !== 'undefined' ? 'http://localhost:5001' : 'http://localhost:5001');
 
@@ -20,14 +20,14 @@ interface LoginResponse {
 interface DashboardStats {
   stats: {
     pendingRequests: number;
-    occupiedRooms: number;
-    availableRooms: number;
+    activeClients: number;
+    premiumSubscribers: number;
     revenueToday: number;
-    occupancyRate: number;
-    staffActive: number;
-    maintenanceRequests: number;
+    subscriptionRate: number;
+    advisorsActive: number;
+    kycRequests: number;
     avgResponseTime: number;
-    patientSatisfaction: number;
+    clientSatisfaction: number;
   };
 }
 
@@ -136,6 +136,81 @@ interface DepartmentsResponse {
   }>;
 }
 
+interface ClientsResponse {
+  clients: Array<{
+    id: number;
+    prospectId: string;
+    fullName: string;
+    mobileNumber: string;
+    email: string;
+    kycStatus: string;
+    agreementStatus: string;
+    paymentStatus: string;
+    status: string;
+    notes: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+}
+
+interface ClientResponse {
+  client: {
+    id: number;
+    prospectId: string;
+    fullName: string;
+    mobileNumber: string;
+    email: string;
+    kycStatus: string;
+    agreementStatus: string;
+    paymentStatus: string;
+    status: string;
+    notes: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+interface ClientCreationRequest {
+  fullName: string;
+  mobileNumber: string;
+  email: string;
+  source?: string;
+  notes?: string;
+}
+
+interface TelecallerStatsResponse {
+  clientStats: {
+    kycPending: number;
+    agreementPending: number;
+    paymentPending: number;
+    activeClients: number;
+  };
+  callStats: {
+    [key: string]: number;
+  };
+}
+
+interface MessageTemplate {
+  id: number;
+  name: string;
+  body: string;
+  placeholders: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface MessageTemplatesResponse {
+  templates: MessageTemplate[];
+}
+
+interface MessageRequest {
+  clientId: number;
+  templateId: number;
+  templateData: { [key: string]: string };
+  messageType?: string;
+}
+
 class APIService {
   // Authentication
   async login(email: string, password: string): Promise<LoginResponse> {
@@ -182,14 +257,14 @@ class APIService {
       return {
         stats: {
           pendingRequests: 12,
-          occupiedRooms: 65,
-          availableRooms: 35,
+          activeClients: 65,
+          premiumSubscribers: 35,
           revenueToday: 12500,
-          occupancyRate: 65,
-          staffActive: 24,
-          maintenanceRequests: 8,
+          subscriptionRate: 65,
+          advisorsActive: 24,
+          kycRequests: 8,
           avgResponseTime: 32,
-          patientSatisfaction: 94
+          clientSatisfaction: 94
         }
       };
     }
@@ -925,6 +1000,163 @@ class APIService {
         ]
       };
     }
+  }
+
+  // Clients
+  async getClients(): Promise<ClientsResponse> {
+    // For prototype, return mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      clients: [
+        {
+          id: 1,
+          prospectId: 'CLI123456789',
+          fullName: 'Rahul Sharma',
+          mobileNumber: '+91 9876543210',
+          email: 'rahul@example.com',
+          kycStatus: 'VERIFIED',
+          agreementStatus: 'SIGNED',
+          paymentStatus: 'PAID',
+          status: 'ACTIVE_CLIENT',
+          notes: 'Interested in intraday calls',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 2,
+          prospectId: 'CLI987654321',
+          fullName: 'Priya Patel',
+          mobileNumber: '+91 9123456789',
+          email: 'priya@example.com',
+          kycStatus: 'PENDING',
+          agreementStatus: 'PENDING',
+          paymentStatus: 'PENDING',
+          status: 'PROSPECT',
+          notes: 'Called yesterday, will call again today',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    };
+  }
+
+  async getClientById(clientId: number): Promise<ClientResponse> {
+    // For prototype, return mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      client: {
+        id: clientId,
+        prospectId: `CLI${Date.now()}`,
+        fullName: 'Rahul Sharma',
+        mobileNumber: '+91 9876543210',
+        email: 'rahul@example.com',
+        kycStatus: 'VERIFIED',
+        agreementStatus: 'SIGNED',
+        paymentStatus: 'PAID',
+        status: 'ACTIVE_CLIENT',
+        notes: 'Interested in intraday calls',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    };
+  }
+
+  async createClient(clientData: ClientCreationRequest): Promise<ClientResponse> {
+    // For prototype, return mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      client: {
+        id: 999, // Mock ID
+        prospectId: `CLI${Date.now()}`,
+        ...clientData,
+        kycStatus: 'PENDING',
+        agreementStatus: 'PENDING',
+        paymentStatus: 'PENDING',
+        status: 'PROSPECT',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    };
+  }
+
+  async getTelecallerStats(): Promise<TelecallerStatsResponse> {
+    // For prototype, return mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      clientStats: {
+        kycPending: 8,
+        agreementPending: 5,
+        paymentPending: 3,
+        activeClients: 24
+      },
+      callStats: {
+        INTERESTED: 12,
+        NOT_INTERESTED: 35,
+        FOLLOW_UP: 22,
+        WRONG_NUMBER: 5
+      }
+    };
+  }
+
+  async getMessageTemplates(): Promise<MessageTemplatesResponse> {
+    // For prototype, return mock data
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      templates: [
+        {
+          id: 1,
+          name: 'Intraday Buy Call',
+          body: 'Buy {Stock_Name} at {Entry_Price}. Target: {Target_Price}. SL: {Stop_Loss}.',
+          placeholders: ['Stock_Name', 'Entry_Price', 'Target_Price', 'Stop_Loss'],
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: 2,
+          name: 'Intraday Sell Call',
+          body: 'Sell {Stock_Name} at {Entry_Price}. Target: {Target_Price}. SL: {Stop_Loss}.',
+          placeholders: ['Stock_Name', 'Entry_Price', 'Target_Price', 'Stop_Loss'],
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    };
+  }
+
+  async sendAdvisoryMessage(messageData: MessageRequest): Promise<any> {
+    // For prototype, return mock response
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    return {
+      success: true,
+      message: {
+        id: 12345,
+        ...messageData,
+        status: 'PENDING',
+        sentAt: new Date().toISOString()
+      }
+    };
+  }
+
+  async initiateCall(clientId: number): Promise<any> {
+    // For prototype, return mock response
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return {
+      success: true,
+      call: {
+        id: 54321,
+        callerId: 1,
+        clientId,
+        callStatus: 'INITIATED',
+        disposition: null,
+        recordingUrl: null,
+        callStartedAt: new Date().toISOString(),
+        callEndedAt: null,
+        duration: null,
+        createdAt: new Date().toISOString()
+      }
+    };
   }
 }
 

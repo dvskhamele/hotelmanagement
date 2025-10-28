@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvisorX CRM - SEBI Compliant Stock Advisory Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --blue-500: #3b82f6;
+            --indigo-500: #6366f1;
+            --amber-500: #f59e0b;
+            --rose-500: #f43f5e;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .sebi-highlight {
+            background: linear-gradient(120deg, #dbeafe, #ede9fe);
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center mr-3">
+                        <i class="fas fa-chart-line text-teal-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">AdvisorX CRM</h1>
+                        <p class="text-teal-100">SEBI Compliant Stock Advisory Platform</p>
+                    </div>
+                </div>
+                <nav class="flex space-x-6">
+                    <a href="#features" class="hover:text-teal-100 font-medium">Features</a>
+                    <a href="#compliance" class="hover:text-teal-100 font-medium">Compliance</a>
+                    <a href="#modules" class="hover:text-teal-100 font-medium">Modules</a>
+                    <a href="#deployment" class="hover:text-teal-100 font-medium">Deployment</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 md:py-24">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+                Transform Your Advisory Business
+            </h1>
+            <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-10">
+                Complete CRM solution for SEBI-compliant stock advisory firms. From client onboarding to portfolio management, we've got you covered.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="http://localhost:3000" target="_blank" class="bg-teal-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-teal-700 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center">
+                    <i class="fas fa-desktop mr-2"></i>
+                    View Live Demo
+                </a>
+                <a href="#deployment" class="bg-white text-teal-600 border border-teal-500 px-8 py-4 rounded-lg font-medium text-lg hover:bg-slate-50 transition duration-300 inline-flex items-center justify-center">
+                    <i class="fas fa-cloud-upload-alt mr-2"></i>
+                    Deployment Guide
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why AdvisorX CRM?</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+                    Purpose-built for SEBI-compliant stock advisory firms
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-teal-100 text-teal-600">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Full SEBI Compliance</h3>
+                    <p class="text-slate-600">
+                        Automated compliance with all SEBI Research Analyst regulations, including KYC, E-Sign, and communication protocols.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-blue-100 text-blue-600">
+                        <i class="fas fa-mobile-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Mobile-First Design</h3>
+                    <p class="text-slate-600">
+                        Fully responsive interface optimized for all devices with PWA capabilities for offline functionality.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-amber-100 text-amber-600">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Lightning Fast</h3>
+                    <p class="text-slate-600">
+                        Optimized performance with Next.js and modern web technologies for instant page loads and smooth interactions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEBI Compliance Highlight -->
+    <section id="compliance" class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/4 flex justify-center mb-6 md:mb-0">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white w-24 h-24 rounded-full flex items-center justify-center">
+                        <i class="fas fa-file-contract text-4xl"></i>
+                    </div>
+                </div>
+                <div class="md:w-3/4">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">SEBI Compliance Commitment</h2>
+                    <p class="text-slate-600 mb-6">
+                        AdvisorX CRM is built to be fully compliant with Securities and Exchange Board of India (SEBI) regulations for investment advisory services. All features are designed to ensure regulatory adherence and protect both you and your clients.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <div class="font-semibold text-blue-700 mb-2">KYC Verification</div>
+                            <div class="text-slate-600 text-sm">Automated verification through all 5 SEBI-registered KRAs</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <div class="font-semibold text-blue-700 mb-2">Mandatory Agreements</div>
+                            <div class="text-slate-600 text-sm">SEBI-standardized MITC with explicit consent</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <div class="font-semibold text-blue-700 mb-2">Call Recording</div>
+                            <div class="text-slate-600 text-sm">5-year retention of all client communications</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200">
+                            <div class="font-semibold text-blue-700 mb-2">Compliance Reporting</div>
+                            <div class="text-slate-600 text-sm">SEBI audit reports and monthly complaints tracking</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Powerful Features</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+                    Everything you need to efficiently manage your advisory operations in one place
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-teal-100 text-teal-600">
+                        <i class="fas fa-chart-bar text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Dashboard Analytics</h3>
+                    <p class="text-slate-600">
+                        Real-time insights into client portfolio performance with customizable widgets and market visualizations.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-blue-100 text-blue-600">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Client Management</h3>
+                    <p class="text-slate-600">
+                        Track client investments, P&L, and portfolio allocations with real-time updates and alerts.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-amber-100 text-amber-600">
+                        <i class="fas fa-id-card text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">KYC & Requests</h3>
+                    <p class="text-slate-600">
+                        Streamline client onboarding with KYC verification and subscription management with priority handling.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-indigo-100 text-indigo-600">
+                        <i class="fas fa-user-tie text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Advisor Management</h3>
+                    <p class="text-slate-600">
+                        Track advisor performance, client assignments, and research quality scoring.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-rose-100 text-rose-600">
+                        <i class="fas fa-file-signature text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Compliance & E-Sign</h3>
+                    <p class="text-slate-600">
+                        Store signed advisory agreements with eSign integration and maintain compliance records.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-6 shadow-md border border-slate-100 card-hover transition duration-300">
+                    <div class="feature-icon bg-emerald-100 text-emerald-600">
+                        <i class="fas fa-file-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2">Research Reports</h3>
+                    <p class="text-slate-600">
+                        Generate detailed analysis reports with market insights and client performance analytics.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Overview -->
+    <section id="modules" class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Complete Module Coverage</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+                    End-to-end solution for all your advisory business needs
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-tachometer-alt text-teal-500 mr-2"></i>
+                        Dashboard & Analytics
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Real-time business intelligence with sales funnel visualization and performance metrics.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-user-friends text-blue-500 mr-2"></i>
+                        Client Management
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Complete client lifecycle from onboarding to portfolio management and renewals.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-id-card text-amber-500 mr-2"></i>
+                        KYC Verification
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Automated verification through all 5 SEBI-registered KRAs with compliance tracking.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-file-signature text-rose-500 mr-2"></i>
+                        E-Sign Integration
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Legally valid Aadhaar OTP e-signatures with secure document storage and audit trails.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-comments-dollar text-indigo-500 mr-2"></i>
+                        Advisory Delivery
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Template-based messaging with mandatory disclosure footers and consent verification.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                        <i class="fas fa-file-invoice-dollar text-emerald-500 mr-2"></i>
+                        Subscription Management
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        Configurable plans with automated billing and SEBI fee cap compliance enforcement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment Guide -->
+    <section id="deployment" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Easy Deployment</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+                    Get your AdvisorX CRM up and running in minutes
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 border border-slate-200">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6">Deployment Options</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center">1</div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-800 mb-2">Local Testing</h4>
+                                <p class="text-slate-600">
+                                    Test the application locally before deployment:
+                                </p>
+                                <pre class="bg-slate-800 text-slate-100 p-4 rounded-lg mt-2 overflow-x-auto">
+cd /Users/test/startups/advisorymanagement/frontend/out
+npx serve -p 3000</pre>
+                                <p class="text-slate-600 mt-2">
+                                    Then visit: <a href="http://localhost:3000" class="text-teal-600 hover:underline">http://localhost:3000</a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center">2</div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-800 mb-2">Vercel Deployment</h4>
+                                <p class="text-slate-600">
+                                    Deploy to Vercel for free hosting:
+                                </p>
+                                <ol class="list-decimal list-inside text-slate-600 ml-4 mt-2 space-y-1">
+                                    <li>Go to <a href="https://vercel.com/new" class="text-teal-600 hover:underline">https://vercel.com/new</a></li>
+                                    <li>Import the static files from:
+                                        <pre class="bg-slate-800 text-slate-100 p-2 rounded mt-1">/Users/test/startups/advisorymanagement/frontend/out</pre>
+                                    </li>
+                                    <li>Follow the prompts to complete deployment</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center">3</div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-slate-800 mb-2">Alternative Hosting</h4>
+                                <p class="text-slate-600">
+                                    The application can be deployed to any static hosting service:
+                                </p>
+                                <ul class="list-disc list-inside text-slate-600 ml-4 mt-2 space-y-1">
+                                    <li>Netlify (drag and drop the out folder)</li>
+                                    <li>GitHub Pages</li>
+                                    <li>AWS S3</li>
+                                    <li>Firebase Hosting</li>
+                                    <li>Any traditional web server</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Important Note
+                    </h3>
+                    <p class="text-blue-700">
+                        This is a fully functional prototype with all SEBI compliance features implemented. 
+                        The application is ready for demonstration to clients and can be customized for specific business requirements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 gradient-bg">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Transform Your Advisory Business?</h2>
+            <p class="text-xl text-teal-100 max-w-3xl mx-auto mb-10">
+                Experience growth like never before with our world-class advisory management system.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="http://localhost:3000" target="_blank" class="bg-white text-teal-600 px-8 py-4 rounded-lg font-medium text-lg hover:bg-slate-100 transition duration-300 shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-desktop mr-2"></i>
+                    View Live Demo
+                </a>
+                <a href="#deployment" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-white hover:text-teal-600 transition duration-300 inline-flex items-center justify-center">
+                    <i class="fas fa-cloud-download-alt mr-2"></i>
+                    Deployment Guide
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <span class="ml-2 text-xl font-bold text-white">AdvisorX</span>
+                    </div>
+                    <p class="mt-4 text-sm">
+                        Delivering exceptional investment advice through innovative advisory solutions.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Solutions</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Client Management</a></li>
+                        <li><a href="#" class="hover:text-white transition">KYC & Compliance</a></li>
+                        <li><a href="#" class="hover:text-white transition">Advisory Research</a></li>
+                        <li><a href="#" class="hover:text-white transition">Portfolio Management</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Investment Guidelines</a></li>
+                        <li><a href="#" class="hover:text-white transition">Training Materials</a></li>
+                        <li><a href="#" class="hover:text-white transition">API Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Support</a></li>
+                        <li><a href="#" class="hover:text-white transition">System Status</a></li>
+                        <li><a href="#" class="hover:text-white transition">SEBI Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 mt-12 pt-8 text-sm text-center">
+                <p>© 2023 AdvisorX Investment Advisory System. All rights reserved.</p>
+                <p class="mt-2">Designed for investment excellence and client satisfaction.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

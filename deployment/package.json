@@ -1,0 +1,15 @@
+{
+  "name": "hotel-ops-app-deployment",
+  "version": "1.0.0",
+  "description": "Hotel Operations Management System for Netlify Deployment",
+  "scripts": {
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "hotel",
+    "management",
+    "operations"
+  ],
+  "author": "Hotel Operations Team",
+  "license": "MIT"
+}

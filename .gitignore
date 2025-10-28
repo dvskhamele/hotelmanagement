@@ -1,0 +1,10 @@
+# Local Netlify folder
+.netlify
+.vercel
+hotel-ops-app/
+.env*.local
+.DS_Store
+node_modules/
+.next/
+dist/
+build/

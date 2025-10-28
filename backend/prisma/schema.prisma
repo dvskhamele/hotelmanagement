@@ -1,0 +1,292 @@
+// Schema for AdvisorX CRM - SEBI Compliant Research Analyst Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for different roles in the system
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  password     String
+  name         String
+  role         UserRole
+  status       UserStatus @default(ACTIVE)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  auditLogs    AuditLog[]
+  clients      Client[] (createdByUser)
+  callsMade    CallLog[]
+  
+  @@map("users")
+}
+
+// User roles as specified in requirements
+enum UserRole {
+  ADMIN
+  ONBOARDING_AGENT
+  RESEARCH_ANALYST
+  COMPLIANCE_OFFICER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// Immutable audit log for all actions (WORM database)
+model AuditLog {
+  id           Int        @id @default(autoincrement())
+  timestamp    DateTime   @default(now())
+  userId       Int
+  userRole     String
+  clientId     Int?
+  actionType   String
+  actionDetails String
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime   @default(now())
+  
+  // Relations
+  user         User       @relation(fields: [userId], references: [id])
+  client       Client?    @relation(fields: [clientId], references: [id])
+  
+  @@map("audit_logs")
+}
+
+// Client model for prospects and clients
+model Client {
+  id                    Int            @id @default(autoincrement())
+  prospectId           String          @unique
+  fullName             String
+  mobileNumber         String
+  email                String?
+  panNumber            String?
+  kycStatus            KYCStatus       @default(PENDING)
+  kycVerificationDate  DateTime?
+  kycDetails           Json?
+  agreementStatus      AgreementStatus @default(PENDING)
+  agreementSentAt      DateTime?
+  agreementSignedAt    DateTime?
+  agreementDocumentUrl String?
+  paymentStatus        PaymentStatus   @default(PENDING)
+  paymentCompletedAt   DateTime?
+  subscriptionPlan     String?
+  subscriptionAmount   Decimal?
+  status               ClientStatus    @default(PENDING)
+  source               String          // How the prospect was acquired
+  notes                String?
+  createdByUserId      Int
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  
+  // Relations
+  createdByUser        User            @relation("ClientCreatedBy", fields: [createdByUserId], references: [id])
+  callsReceived        CallLog[]
+  messagesSent         MessageLog[]
+  auditLogs            AuditLog[]      // For tracking access to client data
+  
+  @@map("clients")
+}
+
+enum KYCStatus {
+  PENDING
+  VERIFIED
+  REGISTERED
+  ON_HOLD
+  REJECTED
+}
+
+enum AgreementStatus {
+  PENDING
+  SENT
+  SIGNED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ClientStatus {
+  PROSPECT
+  ONBOARDING
+  KYC_PENDING
+  AGREEMENT_PENDING
+  PAYMENT_PENDING
+  ACTIVE_CLIENT
+  INACTIVE
+}
+
+// Call logs for telephony integration
+model CallLog {
+  id               Int       @id @default(autoincrement())
+  callerId         Int       // Onboarding agent
+  clientId         Int       // Client being called
+  callStatus       CallStatus
+  disposition      CallDisposition?
+  recordingUrl     String?   // URL to call recording
+  callStartedAt    DateTime
+  callEndedAt      DateTime?
+  duration         Int?      // Duration in seconds
+  notes            String?
+  createdAt        DateTime  @default(now())
+  
+  // Relations
+  user             User      @relation(fields: [callerId], references: [id])
+  client           Client    @relation(fields: [clientId], references: [id])
+  
+  @@map("call_logs")
+}
+
+enum CallStatus {
+  INITIATED
+  RINGING
+  CONNECTED
+  FAILED
+  MISSED
+  COMPLETED
+}
+
+enum CallDisposition {
+  INTERESTED
+  NOT_INTERESTED
+  FOLLOW_UP
+  WRONG_NUMBER
+}
+
+// Message logs for advisory delivery
+model MessageLog {
+  id            Int       @id @default(autoincrement())
+  senderId      Int       // Research analyst
+  clientId      Int       // Client recipient
+  messageType   MessageType
+  templateId    Int?      // If sent using a template
+  messageText   String    // Full message text (including auto-generated disclosures)
+  status        MessageStatus
+  sentAt        DateTime  @default(now())
+  deliveredAt   DateTime?
+  readAt        DateTime?
+  failureReason String?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  user          User      @relation(fields: [senderId], references: [id])
+  client        Client    @relation(fields: [clientId], references: [id])
+  template      MessageTemplate?
+  
+  @@map("message_logs")
+}
+
+enum MessageType {
+  SMS
+  WHATSAPP
+  EMAIL
+  TELEGRAM
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+// Message templates for compliance
+model MessageTemplate {
+  id          Int       @id @default(autoincrement())
+  name        String    // Template name (e.g., "Intraday Buy Call")
+  body        String    // Template body with placeholders like {Stock_Name}
+  placeholders Json[]?  // Array of placeholders used in the template
+  createdBy   Int       // Admin or Compliance Officer who created
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  creator     User      @relation(fields: [createdBy], references: [id])
+  messages    MessageLog[]
+  
+  @@map("message_templates")
+}
+
+// Client subscriptions and payment tracking
+model Subscription {
+  id               Int      @id @default(autoincrement())
+  clientId         Int
+  planName         String
+  amount           Decimal
+  currency         String    @default("INR")
+  paymentStatus    PaymentStatus
+  paymentGatewayId String?   // ID from payment gateway
+  paymentLink      String?   // Payment link sent to client
+  paymentLinkSentAt DateTime?
+  paymentReceivedAt DateTime?
+  expiryDate       DateTime?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  // Relations
+  client           Client   @relation(fields: [clientId], references: [id])
+  
+  @@map("subscriptions")
+}
+
+// KYC verification records
+model KYCRecord {
+  id               Int      @id @default(autoincrement())
+  clientId         Int
+  kycProvider      String   // Name of KRA aggregator (Digio, Signzy, etc.)
+  kycStatus        String   // Status from KRA
+  kycReferenceId   String?
+  kycData          Json?    // Raw data from KRA
+  verificationDate DateTime
+  expiryDate       DateTime?
+  remarks          String?
+  createdAt        DateTime @default(now())
+  
+  // Relations
+  client           Client   @relation(fields: [clientId], references: [id])
+  
+  @@map("kyc_records")
+}
+
+// Compliance reports and audit archives
+model ComplianceReport {
+  id               Int      @id @default(autoincrement())
+  reportType       String   // "SEBI_AUDIT", "MONTHLY_COMPLAINTS", etc.
+  reportPeriod     String   // Date range for the report
+  createdBy        Int      // User who generated the report
+  status           ReportStatus
+  downloadUrl      String?  // URL to download the report
+  requestDate      DateTime @default(now())
+  completedAt      DateTime?
+  notes            String?
+  createdAt        DateTime @default(now())
+  
+  // Relations
+  user             User     @relation(fields: [createdBy], references: [id])
+  
+  @@map("compliance_reports")
+}
+
+enum ReportStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+}

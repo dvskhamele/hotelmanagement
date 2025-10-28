@@ -1,0 +1,24 @@
+{
+  "name": "hospital-management-system",
+  "version": "1.0.0",
+  "description": "SuperHealth Hospital Management System",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "dev": "cd frontend && npm run dev"
+  },
+  "keywords": [
+    "hospital",
+    "management",
+    "healthcare",
+    "nextjs",
+    "react"
+  ],
+  "author": "SuperHealth Team",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cors": "2.8.5",
+    "express": "5.1.0"
+  }
+}

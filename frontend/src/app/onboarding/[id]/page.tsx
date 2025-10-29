@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, useParams } from 'next/navigation'
-import Header from '../../components/Header'
-import MobileNavigation from '../../components/MobileNavigation'
-import apiService from '../../utils/apiService'
+import Header from '../../../components/Header'
+import MobileNavigation from '../../../components/MobileNavigation'
+import apiService from '../../../utils/apiService'
 
 export default function ClientOnboardingWizard() {
   const router = useRouter()
@@ -19,7 +19,7 @@ export default function ClientOnboardingWizard() {
     kycStatus: 'PENDING',
     kycVerificationDate: null,
     agreementStatus: 'PENDING',
-    paymentStatus: 'PENDING'
+    paymentStatus: 'PENDING',
   })
   const [kycResult, setKycResult] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -32,7 +32,7 @@ export default function ClientOnboardingWizard() {
     }
   }, [params.id])
 
-  const loadClientData = async (clientId) => {
+  const loadClientData = async (clientId: any) => {
     try {
       // For prototype, use mock data
       const mockClient = {
@@ -44,11 +44,11 @@ export default function ClientOnboardingWizard() {
         panNumber: '',
         kycStatus: 'PENDING',
         agreementStatus: 'PENDING',
-        paymentStatus: 'PENDING'
-      }
+        paymentStatus: 'PENDING',
+        kycVerificationDate: null,      }
       setClientData(mockClient)
     } catch (err) {
-      setError('Failed to load client data')
+      setError('Failed to load client data as any)     
       console.error('Error loading client data:', err)
     }
   }

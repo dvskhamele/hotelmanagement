@@ -7,7 +7,7 @@ echo "🏥 HospitalOps Vercel Deployment Script"
 echo "======================================="
 
 # Check if we're in the right directory
-BASE_DIR="/Users/test/startups/advisorymanagement"
+BASE_DIR="/Users/test/startups/hotelmanagement"
 if [ ! -d "$BASE_DIR" ]; then
     echo "❌ Error: HospitalOps directory not found at $BASE_DIR"
     exit 1
@@ -72,7 +72,7 @@ echo "📤 Starting deployment..."
 echo ""
 
 # Deploy the project (frontend only for now)
-vercel --prod
+vercel --prod --yes
 
 if [ $? -eq 0 ]; then
     echo ""

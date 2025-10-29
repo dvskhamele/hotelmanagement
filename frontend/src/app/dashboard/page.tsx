@@ -63,14 +63,14 @@ export default function Dashboard() {
     try {
       // Fetch dashboard stats
       const statsData = await apiService.getDashboardStats()
-      setStats(statsData.stats)
+      setStats(statsData.stats as any)
       
       // Fetch recent activity
       const activityData = await apiService.getDashboardActivity()
       setActivity(activityData.activity)
       
       // Fetch clients for preview
-      const clientsData = await apiService.getDashboardClients()
+      const clientsData = await (apiService as any).getDashboardClients()
       setClients(clientsData.clients)
       
       // Fetch requests for preview
@@ -79,21 +79,9 @@ export default function Dashboard() {
       
       // Fetch performance data
       const performanceData = await apiService.getDashboardPerformance()
-      setPerformance(performanceData)
+      setPerformance(performanceData as any)
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
-      // Fallback to mock data if API fails
-      setStats({
-        pendingRequests: 12,
-        activeClients: 65,
-        premiumSubscribers: 35,
-        revenueToday: 12500,
-        subscriptionRate: 65,
-        advisorsActive: 24,
-        kycRequests: 8,
-        avgResponseTime: 32,
-        clientSatisfaction: 94
-      })
     }
   }
 
@@ -338,7 +326,7 @@ export default function Dashboard() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-slate-500">Pending KYC Requests</p>
-                <p className="text-3xl font-bold text-slate-800 mt-1">{stats.pendingRequests}</p>
+                <p className="text-3xl font-bold text-slate-800 mt-1">{stats.pendingKycRequests}</p>
               </div>
               <div className="bg-amber-100 p-3 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -756,7 +744,7 @@ export default function Dashboard() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-slate-500">Pending KYC Requests</p>
-                <p className="text-3xl font-bold text-slate-800 mt-1">{stats.kycRequests}</p>
+                <p className="text-3xl font-bold text-slate-800 mt-1">{stats.pendingKycRequests}</p>
               </div>
               <div className="bg-rose-100 p-3 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

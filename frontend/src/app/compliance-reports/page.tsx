@@ -19,7 +19,7 @@ export default function ComplianceReports() {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('token')
-      if (!token || (user && user.role !== 'ADMIN' && user.role !== 'COMPLIANCE_OFFICER')) {
+      if (!token || (user && (user as any).role !== 'ADMIN' && (user as any).role !== 'COMPLIANCE_OFFICER')) {
         router.push('/')
         return
       }
@@ -90,7 +90,7 @@ export default function ComplianceReports() {
         ipAddress: '192.168.1.103'
       }
     ]
-    setAuditLogs(mockLogs)
+    setAuditLogs(mockLogs as any)
   }
 
   const handleGenerateReport = async () => {
@@ -249,25 +249,25 @@ export default function ComplianceReports() {
               </thead>
               <tbody className="bg-white divide-y divide-slate-200">
                 {auditLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50">
+                  <tr key={(log as any).id} className="hover:bg-slate-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {new Date(log.timestamp).toLocaleString()}
+                      {new Date((log as any).timestamp).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                      User {log.userId}
+                      User {(log as any).userId}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {log.userRole}
+                        {(log as any).userRole}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        {log.actionType}
+                        {(log as any).actionType}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500 max-w-xs">
-                      {log.actionDetails}
+                      {(log as any).actionDetails}
                     </td>
                   </tr>
                 ))}

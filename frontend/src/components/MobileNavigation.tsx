@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import '../styles/safe-area.css'
+import './styles/safe-area.css'
 
 interface NavItem {
   name: string;
